@@ -17,9 +17,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ControllerActivity" />
+        <activity android:name=".controller.ControllerActivity" />
 
-        <activity android:name=".RobotActivity" />
+        <activity android:name=".robot.RobotActivity" />
     </application>
 
 </manifest>

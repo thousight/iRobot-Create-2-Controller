@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">iRobot-Create-2-Controller</string>
+    <string name="controller">Controller</string>
+    <string name="robot">Robot</string>
 </resources>

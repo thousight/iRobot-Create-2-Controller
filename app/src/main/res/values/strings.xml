@@ -1,9 +1,11 @@
 <resources>
-    <string name="app_name">iRobot-Create-2-Controller</string>
+    <string name="app_name">iRobot Create 2 Controller</string>
     <string name="controller">Controller</string>
     <string name="robot">Robot</string>
     <string name="left_button">Left button</string>
     <string name="up_button">Up button</string>
     <string name="right_button">Right button</string>
     <string name="down_button">Down button</string>
+    <string name="record_button">Record button</string>
+    <string name="controller_card_image">Controller card image</string>
 </resources>

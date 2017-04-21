@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
         robotCard = (CardView)findViewById(R.id.robotCard);
         controllerCard = (CardView)findViewById(R.id.controllerCard);
 
+        // TODO: Get all the permissions here
+
         controllerCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

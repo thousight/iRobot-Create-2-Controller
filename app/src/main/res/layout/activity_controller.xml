@@ -5,9 +5,83 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="8dp"
-    tools:context="www.markwen.space.irobot_create_2_controller.MainActivity">
+    tools:context="www.markwen.space.irobot_create_2_controller.controller.ControllerActivity">
 
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="250dp" />
 
+    <ImageButton
+        android:id="@+id/recordButton"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="transparent"
+        android:layout_margin="8dp"
+        android:src="@drawable/ic_fiber_manual_record_black_48px"
+        android:scaleType="fitXY"
+        android:tint="#F44336"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/leftButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="60dp"
+            android:background="transparent"
+            android:rotation="180"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_play_arrow_black_48px"
+            android:contentDescription="@string/left_button" />
+
+        <ImageButton
+            android:id="@+id/upButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:background="transparent"
+            android:rotation="270"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_play_arrow_black_48px"
+            android:contentDescription="@string/up_button" />
+
+        <ImageButton
+            android:id="@+id/rightButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignBaseline="@+id/leftButton"
+            android:layout_alignBottom="@+id/leftButton"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="60dp"
+            android:background="transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_play_arrow_black_48px"
+            android:contentDescription="@string/right_button" />
+
+        <ImageButton
+            android:id="@+id/downButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/upButton"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/upButton"
+            android:layout_marginBottom="8dp"
+            android:background="transparent"
+            android:rotation="90"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_play_arrow_black_48px"
+            android:contentDescription="@string/down_button" />
+
+    </RelativeLayout>
 
 </LinearLayout>

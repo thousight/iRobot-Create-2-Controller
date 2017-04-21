@@ -8,4 +8,5 @@
     <string name="down_button">Down button</string>
     <string name="record_button">Record button</string>
     <string name="controller_card_image">Controller card image</string>
+    <string name="enter_ip_address_of_the_robot">Enter IP address of the robot</string>
 </resources>

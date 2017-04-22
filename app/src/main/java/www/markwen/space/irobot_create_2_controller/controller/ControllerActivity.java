@@ -56,8 +56,7 @@ public class ControllerActivity extends AppCompatActivity {
                         EditText robotIpEditText = (EditText) dialog.getView().findViewById(R.id.client_IP_input);
                         robotIP = robotIpEditText.getText().toString();
                         // Connect to robot
-                        ControllerClient myClient = new ControllerClient(robotIP, 2333, ControllerActivity.this);
-                        myClient.execute();
+                        sendCommandToServer("Connect");
                         connectingDialog = new MaterialDialog.Builder(ControllerActivity.this)
                                 .title("Connecting")
                                 .content("Connecting to " + robotIP)
@@ -80,6 +79,42 @@ public class ControllerActivity extends AppCompatActivity {
         if (!isConnected) {
             connectionDialog.show();
         }
+
+        recordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: start recording streamed video
+
+            }
+        });
+
+        leftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendCommandToServer("Left");
+            }
+        });
+
+        rightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendCommandToServer("Right");
+            }
+        });
+
+        upButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendCommandToServer("Up");
+            }
+        });
+
+        downButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendCommandToServer("Down");
+            }
+        });
     }
 
     public void setConnected() {
@@ -87,6 +122,15 @@ public class ControllerActivity extends AppCompatActivity {
         connectionDialog.dismiss();
         connectingDialog.dismiss();
         Toast.makeText(this, "Connected to " + robotIP, Toast.LENGTH_SHORT).show();
+    }
+
+    /*
+    Command list:
+    "Connect" to initially connect to robot
+    "Up" / "Down" / "Left" / "Right" to send robot directions command
+     */
+    private void sendCommandToServer(String command) {
+        new ControllerClient(robotIP, 2333, ControllerActivity.this, command).execute();
     }
 
 }

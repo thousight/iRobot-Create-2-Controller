@@ -44,7 +44,7 @@ public class RobotActivity extends AppCompatActivity {
         robotCameraView = (VideoView)findViewById(R.id.robotCameraView);
 
         connectionDialog = new MaterialDialog.Builder(this)
-                .title("Waiting for a client")
+                .title("Connecting")
                 .customView(R.layout.server_connect_dialog, false)
                 .cancelable(false)
                 .build();
@@ -80,7 +80,24 @@ public class RobotActivity extends AppCompatActivity {
     }
 
     /*
-    TODO: Call this function when clieent and robot are connected
+    TODO: Code to connect to robot
+     */
+    public void connectToRobot() {
+        // TODO: connect to robot
+
+        isConnectedToRobot = true;
+        setFinishConnection();
+    }
+
+    /*
+    TODO: Code to move robot to direction
+     */
+    public void moveRobot(String direction) {
+
+    }
+
+    /*
+    TODO: Call this function when client and robot are connected to dismiss the dialog and proceed
      */
     public void setFinishConnection() {
         if (isConnectedToClient && isConnectedToRobot) {
@@ -88,6 +105,7 @@ public class RobotActivity extends AppCompatActivity {
         }
     }
 
+    // Getting IP address of the device
     private String getIpAddress() {
         String ip = "";
         try {
@@ -104,11 +122,8 @@ public class RobotActivity extends AppCompatActivity {
                     if (inetAddress.isSiteLocalAddress()) {
                         ip = inetAddress.getHostAddress();
                     }
-
                 }
-
             }
-
         } catch (SocketException e) {
             e.printStackTrace();
             ip = "Something Wrong! " + e.toString();
@@ -143,27 +158,37 @@ public class RobotActivity extends AppCompatActivity {
 
                 while (true) {
                     socket = serverSocket.accept();
+                    socket.setSoTimeout(200);
                     dataInputStream = new DataInputStream(
                             socket.getInputStream());
                     dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
                     final Socket finalSocket = socket;
-//                    final String finalMessageFromClient = dataInputStream.readUTF();
+                    final String finalMessageFromClient = dataInputStream.readUTF(); // Receive command from client
 
-                    // Set UI
+                    // Actions in UI thread after receiving commands from client
                     RobotActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            ConnectedDevice.setText("Connected Device IP: " + finalSocket.getInetAddress().getHostAddress());
-                            setFinishConnection();
-//                            Toast.makeText(RobotActivity.this, finalMessageFromClient, Toast.LENGTH_SHORT).show();
+                            if (finalMessageFromClient.equals("Connect")) {
+                                ConnectedDevice.setText("Connected Device IP: " + finalSocket.getInetAddress().getHostAddress());
+                                isConnectedToClient = true;
+                                setFinishConnection();
+                            } else {
+                                moveRobot(finalMessageFromClient);
+                            }
+
+                            // Show received command from client
+                            Toast.makeText(RobotActivity.this, finalMessageFromClient, Toast.LENGTH_SHORT).show();
                         }
                     });
 
-                    // Reply confirm connection
-                    PrintStream printStream = new PrintStream(dataOutputStream);
-                    printStream.print(true);
-                    printStream.close();
+                    // Reply confirm connection at the beginning
+                    if (finalMessageFromClient.equals("Connect")) {
+                        PrintStream printStream = new PrintStream(dataOutputStream);
+                        printStream.print(true);
+                        printStream.close();
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -188,3 +213,4 @@ public class RobotActivity extends AppCompatActivity {
 
     }
 }
+

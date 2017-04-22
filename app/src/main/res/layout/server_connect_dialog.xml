@@ -23,6 +23,7 @@
         android:gravity="center" />
 
     <TextView
+        android:text="Waiting for client connection"
         android:id="@+id/ConnectedDevice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

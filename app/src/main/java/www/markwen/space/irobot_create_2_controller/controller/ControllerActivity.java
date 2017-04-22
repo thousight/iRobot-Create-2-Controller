@@ -11,6 +11,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import www.markwen.space.irobot_create_2_controller.R;
@@ -22,7 +23,7 @@ import www.markwen.space.irobot_create_2_controller.R;
 public class ControllerActivity extends AppCompatActivity {
 
     private boolean isConnected = false;
-    private MaterialDialog connectionDialog;
+    private MaterialDialog connectionDialog, connectingDialog;
     private VideoView videoView;
     private ImageButton recordButton, leftButton, rightButton, upButton, downButton;
     private String robotIP = "";
@@ -44,19 +45,26 @@ public class ControllerActivity extends AppCompatActivity {
                 .title("Connecting")
                 .customView(R.layout.client_connect_dialog, false)
                 .cancelable(false)
-                .positiveText("Connect")
+                .buttonsGravity(GravityEnum.END)
+                .neutralText("Connect")
                 .negativeText("Cancel")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
                         // Get IP address
                         isConnected = true;
-                        View connectionDialogView = dialog.getView();
-                        EditText robotIpEditText = (EditText) connectionDialogView.findViewById(R.id.client_IP_input);
+                        EditText robotIpEditText = (EditText) dialog.getView().findViewById(R.id.client_IP_input);
                         robotIP = robotIpEditText.getText().toString();
                         // Connect to robot
                         ControllerClient myClient = new ControllerClient(robotIP, 2333, ControllerActivity.this);
                         myClient.execute();
+                        connectingDialog = new MaterialDialog.Builder(ControllerActivity.this)
+                                .title("Connecting")
+                                .content("Connecting to " + robotIP)
+                                .progress(true, 100, false)
+                                .cancelable(false)
+                                .build();
+                        connectingDialog.show();
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -65,9 +73,9 @@ public class ControllerActivity extends AppCompatActivity {
                         ControllerActivity.this.finish();
                     }
                 })
+                .neutralColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent, null))
                 .negativeColor(ResourcesCompat.getColor(getResources(), R.color.colorNegative, null))
                 .build();
-
 
         if (!isConnected) {
             connectionDialog.show();
@@ -77,6 +85,7 @@ public class ControllerActivity extends AppCompatActivity {
     public void setConnected() {
         isConnected = true;
         connectionDialog.dismiss();
+        connectingDialog.dismiss();
         Toast.makeText(this, "Connected to " + robotIP, Toast.LENGTH_SHORT).show();
     }
 

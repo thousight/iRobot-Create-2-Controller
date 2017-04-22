@@ -2,6 +2,8 @@ package www.markwen.space.irobot_create_2_controller.robot;
 
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.io.DataInputStream;
@@ -47,6 +51,14 @@ public class RobotActivity extends AppCompatActivity {
                 .title("Connecting")
                 .customView(R.layout.server_connect_dialog, false)
                 .cancelable(false)
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        RobotActivity.this.finish();
+                    }
+                })
+                .negativeText("Cancel")
+                .negativeColor(ResourcesCompat.getColor(getResources(), R.color.colorNegative, null))
                 .build();
         View connectionDialogView = connectionDialog.getView();
         IPText = (TextView)connectionDialogView.findViewById(R.id.IP);

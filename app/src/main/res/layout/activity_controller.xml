@@ -45,12 +45,26 @@
                 android:contentDescription="@string/record_button" />
         </LinearLayout>
 
+        <TextView
+            android:text="@string/speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/speedSpinner"
+            android:layout_alignLeft="@+id/speedSpinner"
+            android:layout_above="@+id/speedSpinner" />
+
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/speedSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/recordWrapper"
+            android:layout_below="@+id/recordWrapper"
             android:layout_alignParentRight="true"/>
+
+        <TextView
+            android:text="@string/mode"
+            android:layout_above="@+id/modeSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/modeSpinner"
@@ -125,6 +139,18 @@
                 android:tint="#333333"
                 android:src="@drawable/ic_play_arrow_black_48px"
                 android:contentDescription="@string/down_button" />
+
+            <ImageButton
+                android:id="@+id/beepButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="8dp"
+                android:background="?android:selectableItemBackground"
+                android:scaleType="fitXY"
+                android:tint="#333333"
+                android:src="@drawable/ic_bell"
+                android:contentDescription="@string/beep_button" />
 
         </RelativeLayout>
 

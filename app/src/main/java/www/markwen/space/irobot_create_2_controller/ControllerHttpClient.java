@@ -30,4 +30,8 @@ public class ControllerHttpClient {
         requestParams.add("Mode", mode);
         client.post("http://" + url + "/setRobotMode", requestParams, res);
     }
+
+    public void beepRobot(String url, AsyncHttpResponseHandler res) {
+        client.post("http://" + url + "/beepRobot", new RequestParams(), res);
+    }
 }

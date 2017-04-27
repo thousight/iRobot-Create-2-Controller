@@ -38,7 +38,7 @@ public class ControllerActivity extends AppCompatActivity {
     private boolean isConnected = false;
     private MaterialDialog connectionDialog, connectingDialog;
     private VideoView videoView;
-    private ImageButton recordButton, stopRecordButton, leftButton, rightButton, upButton, downButton;
+    private ImageButton recordButton, stopRecordButton, leftButton, rightButton, upButton, downButton, beepButton;
     private AppCompatSpinner speedSpinner, modeSpinner;
     private String robotIP = "", speed = "Medium";
     private static ControllerHttpClient httpClient;
@@ -55,6 +55,7 @@ public class ControllerActivity extends AppCompatActivity {
         upButton = (ImageButton)findViewById(R.id.upButton);
         rightButton = (ImageButton)findViewById(R.id.rightButton);
         downButton = (ImageButton)findViewById(R.id.downButton);
+        beepButton = (ImageButton)findViewById(R.id.beepButton);
         speedSpinner = (AppCompatSpinner)findViewById(R.id.speedSpinner);
         modeSpinner = (AppCompatSpinner)findViewById(R.id.modeSpinner);
         stopRecordButton.setVisibility(View.GONE);
@@ -76,7 +77,6 @@ public class ControllerActivity extends AppCompatActivity {
         speedList.add("Slow");
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, speedList);
         speedSpinner.setAdapter(spinnerAdapter);
-        speedSpinner.setSelection(1); // Select "Medium" at start
         speedSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -98,21 +98,23 @@ public class ControllerActivity extends AppCompatActivity {
         modeList.add("Doc");
         modeList.add("Reset");
         final ArrayAdapter<String> modeAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, modeList);
-        speedSpinner.setAdapter(spinnerAdapter);
-        speedSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        modeSpinner.setAdapter(modeAdapter);
+        modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                httpClient.setRobotMode(robotIP, modeAdapter.getItem(i), new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                if (!robotIP.equals("")) {
+                    httpClient.setRobotMode(robotIP, modeAdapter.getItem(i), new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        setDisconnected(error);
-                    }
-                });
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                            setDisconnected(error);
+                        }
+                    });
+                }
             }
 
             @Override
@@ -128,7 +130,7 @@ public class ControllerActivity extends AppCompatActivity {
         connectionDialog = new MaterialDialog.Builder(this)
                 .title("Connecting")
                 .customView(R.layout.client_connect_dialog, false)
-                .cancelable(false)
+//                .cancelable(false)
                 .buttonsGravity(GravityEnum.END)
                 .neutralText("Connect")
                 .negativeText("Cancel")
@@ -222,6 +224,23 @@ public class ControllerActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 moveRobot("Down");
+            }
+        });
+
+        beepButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                httpClient.beepRobot(robotIP, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        setDisconnected(error);
+                    }
+                });
             }
         });
     }

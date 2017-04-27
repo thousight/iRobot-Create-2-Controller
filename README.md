@@ -1,2 +1,3 @@
-# iRobot-Create-2-Controller
-CNIT 425 final project about controlling iRobot create 2 with 2 smartphones
+# iRobot Create 2 Controller Client
+CNIT 425 final project about controlling iRobot Create 2 with an Android phone.
+Robot side requires Raspberry Pi connection and a server on Raspberry Pi to receive client requests.

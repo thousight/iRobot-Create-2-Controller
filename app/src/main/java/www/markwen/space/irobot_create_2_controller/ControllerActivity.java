@@ -16,6 +16,9 @@ import android.widget.VideoView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by markw on 4/17/2017.
@@ -28,6 +31,7 @@ public class ControllerActivity extends AppCompatActivity {
     private VideoView videoView;
     private ImageButton recordButton, leftButton, rightButton, upButton, downButton;
     private String robotIP = "";
+    private static ControllerHttpClient httpClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,9 @@ public class ControllerActivity extends AppCompatActivity {
                     Manifest.permission.ACCESS_FINE_LOCATION
             }, 1);
         }
+
+        // Initialize Http Client
+        httpClient = new ControllerHttpClient();
 
         // Dialog for connecting to a robot
         connectionDialog = new MaterialDialog.Builder(this)
@@ -141,7 +148,35 @@ public class ControllerActivity extends AppCompatActivity {
     "Up" / "Down" / "Left" / "Right" to send robot directions command
      */
     private void sendCommandToServer(String command) {
-        new ControllerClient(robotIP, 2333, ControllerActivity.this, command).execute();
+        if (command.equals("Connect")) {
+            httpClient.testConnection(robotIP, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    setConnected();
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    Toast.makeText(ControllerActivity.this, "Connection failed: " + error.toString(), Toast.LENGTH_LONG).show();
+                    isConnected = false;
+                    connectionDialog.show();
+                }
+            });
+        } else {
+            httpClient.moveRobot(robotIP, command, "10", new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    Toast.makeText(ControllerActivity.this, "Connection failed, please reconnect: " + error.toString(), Toast.LENGTH_LONG).show();
+                    isConnected = false;
+                    connectionDialog.show();
+                }
+            });
+        }
     }
 
 }

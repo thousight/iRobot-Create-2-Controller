@@ -49,9 +49,16 @@
             android:id="@+id/speedSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_below="@id/recordWrapper"
             android:layout_alignParentRight="true"/>
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/modeSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/recordWrapper"
+            android:layout_alignParentLeft="true"/>
 
         <RelativeLayout
             android:id="@+id/directionButtonsWrapper"

@@ -16,13 +16,18 @@ public class ControllerHttpClient {
         RequestParams requestParams = new RequestParams();
         requestParams.add("Direction", direction);
         requestParams.add("Speed", speed);
-        client.post("http://" + url, requestParams, res);
+        client.post("http://" + url + "/moveRobot", requestParams, res);
     }
 
     public void testConnection(String url, AsyncHttpResponseHandler res) {
         RequestParams requestParams = new RequestParams();
         requestParams.add("TestConnection", "Test");
-        client.post("http://" + url, requestParams, res);
+        client.post("http://" + url + "/testConnection", requestParams, res);
     }
 
+    public void setRobotMode(String url, String mode, AsyncHttpResponseHandler res) {
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("Mode", mode);
+        client.post("http://" + url + "/setRobotMode", requestParams, res);
+    }
 }

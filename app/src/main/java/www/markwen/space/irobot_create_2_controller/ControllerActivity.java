@@ -39,7 +39,7 @@ public class ControllerActivity extends AppCompatActivity {
     private MaterialDialog connectionDialog, connectingDialog;
     private VideoView videoView;
     private ImageButton recordButton, stopRecordButton, leftButton, rightButton, upButton, downButton;
-    private AppCompatSpinner spinner;
+    private AppCompatSpinner speedSpinner, modeSpinner;
     private String robotIP = "", speed = "Medium";
     private static ControllerHttpClient httpClient;
 
@@ -55,7 +55,8 @@ public class ControllerActivity extends AppCompatActivity {
         upButton = (ImageButton)findViewById(R.id.upButton);
         rightButton = (ImageButton)findViewById(R.id.rightButton);
         downButton = (ImageButton)findViewById(R.id.downButton);
-        spinner = (AppCompatSpinner)findViewById(R.id.speedSpinner);
+        speedSpinner = (AppCompatSpinner)findViewById(R.id.speedSpinner);
+        modeSpinner = (AppCompatSpinner)findViewById(R.id.modeSpinner);
         stopRecordButton.setVisibility(View.GONE);
 
         // Get screen resolution
@@ -68,18 +69,50 @@ public class ControllerActivity extends AppCompatActivity {
         params.height = width * 9 / 16;
         videoView.setLayoutParams(params);
 
-        // Set up spinner
+        // Set up speedSpinner
         final ArrayList<String> speedList = new ArrayList<>();
         speedList.add("Fast");
         speedList.add("Medium");
         speedList.add("Slow");
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, speedList);
-        spinner.setAdapter(spinnerAdapter);
-        spinner.setSelection(1); // Select "Medium" at start
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        speedSpinner.setAdapter(spinnerAdapter);
+        speedSpinner.setSelection(1); // Select "Medium" at start
+        speedSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 speed = speedList.get(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        // Set up modeSpinner
+        final ArrayList<String> modeList = new ArrayList<>();
+        modeList.add("Passive");
+        modeList.add("Safe");
+        modeList.add("Full");
+        modeList.add("Clean");
+        modeList.add("Doc");
+        modeList.add("Reset");
+        final ArrayAdapter<String> modeAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, modeList);
+        speedSpinner.setAdapter(spinnerAdapter);
+        speedSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                httpClient.setRobotMode(robotIP, modeAdapter.getItem(i), new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        setDisconnected(error);
+                    }
+                });
             }
 
             @Override
@@ -116,9 +149,7 @@ public class ControllerActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                                Toast.makeText(ControllerActivity.this, "Connection failed: " + error.toString(), Toast.LENGTH_LONG).show();
-                                isConnected = false;
-                                connectionDialog.show();
+                                setDisconnected(error);
                             }
                         });
 
@@ -202,6 +233,11 @@ public class ControllerActivity extends AppCompatActivity {
         Toast.makeText(this, "Connected to " + robotIP, Toast.LENGTH_SHORT).show();
     }
 
+    public void setDisconnected(Throwable error) {
+        Toast.makeText(ControllerActivity.this, "Connection failed, please reconnect: " + error.toString(), Toast.LENGTH_LONG).show();
+        isConnected = false;
+        connectionDialog.show();
+    }
     /*
     Command list:
     "Connect" to initially connect to robot
@@ -217,9 +253,7 @@ public class ControllerActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                    Toast.makeText(ControllerActivity.this, "Connection failed, please reconnect: " + error.toString(), Toast.LENGTH_LONG).show();
-                    isConnected = false;
-                    connectionDialog.show();
+                    setDisconnected(error);
                 }
             });
         }

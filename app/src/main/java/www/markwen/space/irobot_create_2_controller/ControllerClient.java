@@ -1,6 +1,5 @@
-package www.markwen.space.irobot_create_2_controller.controller;
+package www.markwen.space.irobot_create_2_controller;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 
 import java.io.ByteArrayOutputStream;
@@ -8,7 +7,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
+
+import www.markwen.space.irobot_create_2_controller.ControllerActivity;
 
 /**
  * Created by Mark Wen on 4/21/2017.

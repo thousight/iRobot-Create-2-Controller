@@ -1,7 +1,10 @@
-package www.markwen.space.irobot_create_2_controller.controller;
+package www.markwen.space.irobot_create_2_controller;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,8 +16,6 @@ import android.widget.VideoView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
-
-import www.markwen.space.irobot_create_2_controller.R;
 
 /**
  * Created by markw on 4/17/2017.
@@ -39,6 +40,16 @@ public class ControllerActivity extends AppCompatActivity {
         upButton = (ImageButton)findViewById(R.id.upButton);
         rightButton = (ImageButton)findViewById(R.id.rightButton);
         downButton = (ImageButton)findViewById(R.id.downButton);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE) !=  PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) !=  PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=  PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.ACCESS_WIFI_STATE,
+                    Manifest.permission.ACCESS_NETWORK_STATE,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            }, 1);
+        }
 
         // Dialog for connecting to a robot
         connectionDialog = new MaterialDialog.Builder(this)

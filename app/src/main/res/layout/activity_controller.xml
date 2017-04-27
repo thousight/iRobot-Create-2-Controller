@@ -15,24 +15,43 @@
             android:layout_height="250dp"
             android:layout_alignParentTop="true"/>
 
-        <ImageButton
-            android:id="@+id/recordButton"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_margin="8dp"
-            android:src="@drawable/ic_fiber_manual_record_black_48px"
-            android:scaleType="fitXY"
-            android:tint="@color/colorNegative"
-            android:background="#00000000"
+        <LinearLayout
+            android:id="@+id/recordWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/videoView"
-            android:contentDescription="@string/record_button" />
+            android:layout_below="@id/videoView">
+            <ImageButton
+                android:id="@+id/recordButton"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_fiber_manual_record_black_48px"
+                android:scaleType="fitXY"
+                android:tint="@color/colorNegative"
+                android:background="#00000000"
+
+                android:contentDescription="@string/record_button" />
+
+            <ImageButton
+                android:id="@+id/stopRecordButton"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_stop_black_48px"
+                android:scaleType="fitXY"
+                android:tint="@color/colorNegative"
+                android:background="#00000000"
+                android:contentDescription="@string/record_button" />
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/directionButtonsWrapper"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/recordButton"
+            android:layout_below="@id/recordWrapper"
             android:layout_width="match_parent"
             android:layout_height="230dp">
 

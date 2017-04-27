@@ -27,12 +27,10 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_margin="8dp"
                 android:src="@drawable/ic_fiber_manual_record_black_48px"
                 android:scaleType="fitXY"
                 android:tint="@color/colorNegative"
                 android:background="#00000000"
-
                 android:contentDescription="@string/record_button" />
 
             <ImageButton
@@ -40,7 +38,6 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_margin="8dp"
                 android:src="@drawable/ic_stop_black_48px"
                 android:scaleType="fitXY"
                 android:tint="@color/colorNegative"
@@ -48,12 +45,20 @@
                 android:contentDescription="@string/record_button" />
         </LinearLayout>
 
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/speedSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/recordWrapper"
+            android:layout_alignParentRight="true"/>
+
         <RelativeLayout
             android:id="@+id/directionButtonsWrapper"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/recordWrapper"
+            android:layout_below="@id/speedSpinner"
             android:layout_width="match_parent"
-            android:layout_height="230dp">
+            android:layout_height="200dp">
 
             <ImageButton
                 android:id="@+id/leftButton"
@@ -62,7 +67,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="70dp"
+                android:layout_marginLeft="75dp"
                 android:background="?android:selectableItemBackground"
                 android:rotation="180"
                 android:scaleType="fitXY"
@@ -92,7 +97,7 @@
                 android:layout_alignBottom="@+id/leftButton"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="70dp"
+                android:layout_marginRight="75dp"
                 android:background="?android:selectableItemBackground"
                 android:scaleType="fitXY"
                 android:tint="#333333"

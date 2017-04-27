@@ -8,9 +8,12 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatSpinner;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -20,6 +23,9 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -33,7 +39,8 @@ public class ControllerActivity extends AppCompatActivity {
     private MaterialDialog connectionDialog, connectingDialog;
     private VideoView videoView;
     private ImageButton recordButton, stopRecordButton, leftButton, rightButton, upButton, downButton;
-    private String robotIP = "";
+    private AppCompatSpinner spinner;
+    private String robotIP = "", speed = "Medium";
     private static ControllerHttpClient httpClient;
 
     @Override
@@ -48,6 +55,7 @@ public class ControllerActivity extends AppCompatActivity {
         upButton = (ImageButton)findViewById(R.id.upButton);
         rightButton = (ImageButton)findViewById(R.id.rightButton);
         downButton = (ImageButton)findViewById(R.id.downButton);
+        spinner = (AppCompatSpinner)findViewById(R.id.speedSpinner);
         stopRecordButton.setVisibility(View.GONE);
 
         // Get screen resolution
@@ -60,15 +68,25 @@ public class ControllerActivity extends AppCompatActivity {
         params.height = width * 9 / 16;
         videoView.setLayoutParams(params);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE) !=  PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) !=  PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=  PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{
-                    Manifest.permission.ACCESS_WIFI_STATE,
-                    Manifest.permission.ACCESS_NETWORK_STATE,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-            }, 1);
-        }
+        // Set up spinner
+        final ArrayList<String> speedList = new ArrayList<>();
+        speedList.add("Fast");
+        speedList.add("Medium");
+        speedList.add("Slow");
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, speedList);
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setSelection(1); // Select "Medium" at start
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                speed = speedList.get(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         // Initialize Http Client
         httpClient = new ControllerHttpClient();
@@ -77,7 +95,7 @@ public class ControllerActivity extends AppCompatActivity {
         connectionDialog = new MaterialDialog.Builder(this)
                 .title("Connecting")
                 .customView(R.layout.client_connect_dialog, false)
-//                .cancelable(false)
+                .cancelable(false)
                 .buttonsGravity(GravityEnum.END)
                 .neutralText("Connect")
                 .negativeText("Cancel")
@@ -151,28 +169,28 @@ public class ControllerActivity extends AppCompatActivity {
         leftButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                moveRobot("Left", 10);
+                moveRobot("Left");
             }
         });
 
         rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                moveRobot("Right", 10);
+                moveRobot("Right");
             }
         });
 
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                moveRobot("Up", 10);
+                moveRobot("Up");
             }
         });
 
         downButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                moveRobot("Down", 10);
+                moveRobot("Down");
             }
         });
     }
@@ -189,9 +207,9 @@ public class ControllerActivity extends AppCompatActivity {
     "Connect" to initially connect to robot
     "Up" / "Down" / "Left" / "Right" to send robot directions command
      */
-    private void moveRobot(String direction, int speed) {
+    private void moveRobot(String direction) {
         if (!robotIP.equals("")) {
-            httpClient.moveRobot(robotIP, direction, String.valueOf(speed), new AsyncHttpResponseHandler() {
+            httpClient.moveRobot(robotIP, direction, speed, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                     // Purposely left empty

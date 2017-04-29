@@ -82,6 +82,17 @@ public class ControllerActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 speed = speedList.get(i);
+                httpClient.setRobotSpeed(robotIP, speed, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        setDisconnected(error);
+                    }
+                });
             }
 
             @Override

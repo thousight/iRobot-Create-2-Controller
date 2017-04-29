@@ -24,6 +24,11 @@ public class ControllerHttpClient {
         client.get("http://" + url + "/"+mode, res);
     }
 
+    public void setRobotSpeed(String url, String speed, AsyncHttpResponseHandler res) {
+        client.get("http://" + url + "/"+speed, res);
+    }
+
+
     public void beepRobot(String url, AsyncHttpResponseHandler res) {
         client.get("http://" + url + "/Beep", res);
     }

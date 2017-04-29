@@ -97,17 +97,19 @@ public class ControllerActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 speed = speedList.get(i);
-                httpClient.setRobotSpeed(robotIP, speed, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                if (!robotIP.equals("")) {
+                    httpClient.setRobotSpeed(robotIP, speed, new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        setDisconnected(error);
-                    }
-                });
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                            setDisconnected(error);
+                        }
+                    });
+                }
             }
 
             @Override
@@ -188,6 +190,16 @@ public class ControllerActivity extends AppCompatActivity {
                                 .content("Connecting to " + robotIP)
                                 .progress(true, 100, false)
                                 .cancelable(false)
+                                .negativeText("Cancel")
+                                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        connectingDialog.dismiss();
+                                        robotIP = "";
+                                        isConnected = false;
+                                        connectionDialog.show();
+                                    }
+                                })
                                 .build();
                         connectingDialog.show();
                     }

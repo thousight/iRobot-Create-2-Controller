@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iRobot-Create-2-Controller.iml" filepath="$PROJECT_DIR$/iRobot-Create-2-Controller.iml" />
       <module fileurl="file://$PROJECT_DIR$/iRobot-Create-2-Controller.iml" filepath="$PROJECT_DIR$/iRobot-Create-2-Controller.iml" />
     </modules>
   </component>

@@ -10,6 +10,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -160,7 +161,7 @@ public class ControllerActivity extends AppCompatActivity {
                                 .title("Connecting")
                                 .content("Connecting to " + robotIP)
                                 .progress(true, 100, false)
-                                .cancelable(false)
+                                .cancelable(true)
                                 .build();
                         connectingDialog.show();
                     }
@@ -199,33 +200,52 @@ public class ControllerActivity extends AppCompatActivity {
             }
         });
 
-        leftButton.setOnClickListener(new View.OnClickListener() {
+        leftButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                moveRobot("Left");
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    moveRobot("Left");
+                }else{
+                    moveRobot("0");
+                }
+                return true;
             }
         });
 
-        rightButton.setOnClickListener(new View.OnClickListener() {
+        downButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                moveRobot("Right");
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    moveRobot("Down");
+                }else{
+                    moveRobot("0");
+                }
+                return true;
+            }
+        });
+        upButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    moveRobot("Up");
+                }else{
+                    moveRobot("0");
+                }
+                return true;
+            }
+        });
+        rightButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    moveRobot("Right");
+                }else{
+                    moveRobot("0");
+                }
+                return true;
             }
         });
 
-        upButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                moveRobot("Up");
-            }
-        });
-
-        downButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                moveRobot("Down");
-            }
-        });
 
         beepButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -264,7 +284,7 @@ public class ControllerActivity extends AppCompatActivity {
      */
     private void moveRobot(String direction) {
         if (!robotIP.equals("")) {
-            httpClient.moveRobot(robotIP, direction, speed, new AsyncHttpResponseHandler() {
+            httpClient.moveRobot(robotIP, direction,  new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                     // Purposely left empty

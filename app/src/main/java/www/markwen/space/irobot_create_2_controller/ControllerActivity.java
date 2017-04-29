@@ -1,8 +1,12 @@
 package www.markwen.space.irobot_create_2_controller;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.media.Image;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -10,6 +14,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -25,6 +31,7 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -142,7 +149,7 @@ public class ControllerActivity extends AppCompatActivity {
         connectionDialog = new MaterialDialog.Builder(this)
                 .title("Connecting")
                 .customView(R.layout.client_connect_dialog, false)
-//                .cancelable(false)
+                .cancelable(false)
                 .buttonsGravity(GravityEnum.END)
                 .neutralText("Connect")
                 .negativeText("Cancel")
@@ -194,8 +201,9 @@ public class ControllerActivity extends AppCompatActivity {
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                recordButton.setVisibility(View.GONE);
-                stopRecordButton.setVisibility(View.VISIBLE);
+//                recordButton.setVisibility(View.GONE);
+                initVideoView("http://"+robotIP+":8090");
+//                stopRecordButton.setVisibility(View.VISIBLE);
                 // TODO: start recording streamed video
 
             }
@@ -309,4 +317,21 @@ public class ControllerActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+        videoView.stopPlayback();
+    }
+
+    private void initVideoView(String url){
+        Uri uri = Uri.parse(url);
+        try {
+            videoView.stopPlayback();
+            videoView.setVideoURI(uri);
+            videoView.start();
+            videoView.requestFocus();
+        }catch (Exception ex){
+            Log.e("VideoView", ex.toString());
+        }
+    }
 }

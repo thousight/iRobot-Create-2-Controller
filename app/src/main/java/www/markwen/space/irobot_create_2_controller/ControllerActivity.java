@@ -1,6 +1,7 @@
 package www.markwen.space.irobot_create_2_controller;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
@@ -34,8 +35,9 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
 import cz.msebera.android.httpclient.Header;
+import tcking.github.com.giraffeplayer.GiraffePlayer;
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
  * Created by markw on 4/17/2017.
@@ -45,18 +47,19 @@ public class ControllerActivity extends AppCompatActivity {
 
     private boolean isConnected = false;
     private MaterialDialog connectionDialog, connectingDialog;
-    private VideoView videoView;
+//    private VideoView videoView;
     private ImageButton recordButton, stopRecordButton, leftButton, rightButton, upButton, downButton, beepButton;
     private AppCompatSpinner speedSpinner, modeSpinner;
     private String robotIP = "", speed = "Medium";
     private static ControllerHttpClient httpClient;
+    private GiraffePlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_controller);
 
-        videoView = (VideoView)findViewById(R.id.videoView);
+//        videoView = (VideoView)findViewById(R.id.videoView);
         recordButton = (ImageButton)findViewById(R.id.recordButton);
         stopRecordButton = (ImageButton)findViewById(R.id.stopRecordButton);
         leftButton = (ImageButton)findViewById(R.id.leftButton);
@@ -68,15 +71,20 @@ public class ControllerActivity extends AppCompatActivity {
         modeSpinner = (AppCompatSpinner)findViewById(R.id.modeSpinner);
         stopRecordButton.setVisibility(View.GONE);
 
+        IjkMediaPlayer ijkMediaPlayer = new IjkMediaPlayer();
+        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "packet-buffering", "0");
+
+        player = new GiraffePlayer(this);
+
         // Get screen resolution
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
 
         // Set VideoView height based on screen resolution
-        ViewGroup.LayoutParams params = videoView.getLayoutParams();
-        params.height = width * 9 / 16;
-        videoView.setLayoutParams(params);
+//        ViewGroup.LayoutParams params = player.getLayoutParams();
+//        params.height = width * 9 / 16;
+//        player.setLayoutParams(params);
 
         // Set up speedSpinner
         final ArrayList<String> speedList = new ArrayList<>();
@@ -317,19 +325,10 @@ public class ControllerActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onPause(){
-        super.onPause();
-        videoView.stopPlayback();
-    }
-
     private void initVideoView(String url){
         Uri uri = Uri.parse(url);
         try {
-            videoView.stopPlayback();
-            videoView.setVideoURI(uri);
-            videoView.start();
-            videoView.requestFocus();
+            player.play(url);
         }catch (Exception ex){
             Log.e("VideoView", ex.toString());
         }

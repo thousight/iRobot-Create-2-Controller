@@ -9,11 +9,15 @@
         tools:context="www.markwen.space.irobot_create_2_controller.ControllerActivity"
         android:gravity="center_horizontal">
 
-        <VideoView
-            android:id="@+id/videoView"
+        <!--<VideoView-->
+            <!--android:id="@+id/videoView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="250dp"-->
+            <!--android:layout_alignParentTop="true"/>-->
+        <include
+            layout="@layout/giraffe_player"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_alignParentTop="true"/>
+            android:layout_height="210dp"/>
 
         <LinearLayout
             android:id="@+id/recordWrapper"
@@ -21,7 +25,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/videoView">
+            android:layout_below="@+id/app_video_box">
             <ImageButton
                 android:id="@+id/recordButton"
                 android:layout_gravity="center_horizontal"

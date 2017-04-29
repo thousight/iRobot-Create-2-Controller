@@ -172,7 +172,7 @@ public class ControllerActivity extends AppCompatActivity {
                                 .title("Connecting")
                                 .content("Connecting to " + robotIP)
                                 .progress(true, 100, false)
-                                .cancelable(true)
+                                .cancelable(false)
                                 .build();
                         connectingDialog.show();
                     }
